@@ -44,8 +44,6 @@ You can return the answer in any order.
 
 ```erlang
 ﻿% #Easy #Top_100_Liked_Questions #Top_Interview_Questions #Array #Hash_Table
-% #Data_Structure_I_Day_2_Array #Level_1_Day_13_Hashmap #Udemy_Arrays #Big_O_Time_O(n)_Space_O(n)
-% #AI_can_be_used_to_solve_the_task #2025_01_05_Time_3_(97.50%)_Space_65.32_(7.50%)
 
 -spec two_sum(Nums :: [integer()], Target :: integer()) -> [integer()].
 two_sum(Nums, Target) ->

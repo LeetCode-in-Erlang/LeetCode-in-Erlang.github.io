@@ -39,11 +39,6 @@ Given a string `s`, return _the longest palindromic substring_ in `s`.
 ## Solution
 
 ```erlang
-% #Medium #Top_100_Liked_Questions #Top_Interview_Questions #String #Dynamic_Programming
-% #Data_Structure_II_Day_9_String #Algorithm_II_Day_14_Dynamic_Programming
-% #Dynamic_Programming_I_Day_17 #Udemy_Strings #Big_O_Time_O(n)_Space_O(n)
-% #2025_01_08_Time_179_(100.00%)_Space_59.84_(100.00%)
-
 -spec longest_palindrome(S :: unicode:unicode_binary()) -> unicode:unicode_binary().
 longest_palindrome(S) ->
     Length = byte_size(S),

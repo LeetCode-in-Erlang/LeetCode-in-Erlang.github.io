@@ -40,11 +40,6 @@ You may assume the two numbers do not contain any leading zero, except the numbe
 ## Solution
 
 ```erlang
-% #Medium #Top_100_Liked_Questions #Top_Interview_Questions #Math #Linked_List #Recursion
-% #Data_Structure_II_Day_10_Linked_List #Programming_Skills_II_Day_15
-% #Big_O_Time_O(max(N,M))_Space_O(max(N,M)) #AI_can_be_used_to_solve_the_task
-% #2025_01_05_Time_1_(77.78%)_Space_63.11_(100.00%)
-
 %% Definition for singly-linked list.
 %%
 %% -record(list_node, {val = 0 :: integer(),
