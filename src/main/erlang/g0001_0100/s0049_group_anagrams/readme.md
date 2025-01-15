@@ -38,22 +38,23 @@ An **Anagram** is a word or phrase formed by rearranging the letters of a differ
 ```erlang
 -spec group_anagrams(Strs :: [unicode:unicode_binary()]) -> [[unicode:unicode_binary()]].
 group_anagrams(Strs) ->
-    group_anagrams(Strs, dict:new()).
+    AnagramMap = group_anagrams_helper(Strs, #{}),
+    maps:values(AnagramMap).
 
--spec group_anagrams(Strs :: [unicode:unicode_binary()], Acc :: dict:dict()) -> [[unicode:unicode_binary()]].
-group_anagrams([], Acc) ->
-    dict:fold(fun(_, Val, AccAcc) -> [Val | AccAcc] end, [], Acc);
-group_anagrams([Word | Rest], Acc) ->
-    Key = create_key(Word),
-    NewAcc = case dict:find(Key, Acc) of
-                {ok, List} -> dict:store(Key, [Word | List], Acc);
-                error -> dict:store(Key, [Word], Acc)
-              end,
-    group_anagrams(Rest, NewAcc).
+group_anagrams_helper([Head | Tail], Acc) ->
+    NewString = sort_string(Head),
+    NewMap = case maps:is_key(NewString, Acc) of
+        true ->
+            maps:update(NewString, [Head | maps:get(NewString, Acc)], Acc);
+        false ->
+            maps:put(NewString, [Head], Acc)
+    end,
+    group_anagrams_helper(Tail, NewMap);
+group_anagrams_helper([], Acc) ->
+    Acc.
 
--spec create_key(Word :: unicode:unicode_binary()) -> unicode:unicode_binary().
-create_key(Word) ->
-    CharList = unicode:characters_to_list(Word),  % Convert the binary string to a list of characters
-    SortedList = lists:sort(CharList),            % Sort the characters to create a canonical key
-    list_to_binary(SortedList).                   % Convert back to binary for the dictionary key
+sort_string(Str) ->
+    StrList = binary_to_list(Str),        % Convert string to list of characters
+    SortedList = lists:sort(StrList),       % Sort the list of characters
+    list_to_binary(SortedList).
 ```
