@@ -51,36 +51,39 @@ An **island** is surrounded by water and is formed by connecting adjacent lands 
 ## Solution
 
 ```erlang
-%% Definition for a binary tree node.
-%%
-%% -record(tree_node, {val = 0 :: integer(),
-%%                     left = null  :: 'null' | #tree_node{},
-%%                     right = null :: 'null' | #tree_node{}}).
+-spec num_islands([[char()]]) -> integer().
+num_islands(Grid) ->
+    Table = ets:new(grid, []),
+    lists:foreach(
+      fun({Row, I}) ->
+          lists:foreach(
+            fun({X, J}) when X =:= $1 ->
+                ets:insert(Table, {{I, J}});
+               (_) -> ok
+            end,
+            lists:zip(Row, lists:seq(0, length(Row) - 1))
+          )
+      end,
+      lists:zip(Grid, lists:seq(0, length(Grid) - 1))
+    ),
+    count(Table, 0).
 
-%% @spec right_side_view(Root :: #tree_node{} | null) -> [integer()].
--spec right_side_view(Root :: #tree_node{} | null) -> [integer()].
-right_side_view(null) ->
-    [];
-right_side_view(Root) ->
-    right_side_view_level([Root], []).
+count(Table, Ans) ->
+    case ets:first(Table) of
+        '$end_of_table' -> Ans;
+        {I, J} ->
+            sink_island(Table, {I, J}),
+            count(Table, Ans + 1)
+    end.
 
-%% Helper function to traverse the tree level by level
--spec right_side_view_level(Level :: [#tree_node{}], Acc :: [integer()]) -> [integer()].
-right_side_view_level([], Acc) ->
-    lists:reverse(Acc);
-right_side_view_level(Level, Acc) ->
-    % Get the value of the rightmost node at this level
-    RightmostValue = lists:last([Node#tree_node.val || Node <- Level]),
-    % Accumulate the rightmost value
-    NewAcc = [RightmostValue | Acc],
-    % Prepare the next level
-    NextLevel = lists:foldl(fun(Node, AccNextLevel) ->
-        case Node of
-            #tree_node{left = null, right = null} -> AccNextLevel;
-            #tree_node{left = Left, right = Right} ->
-                AccNextLevel ++ lists:filter(fun(X) -> X =/= null end, [Left, Right])
-        end
-    end, [], Level),
-    % Recursive call to process the next level
-    right_side_view_level(NextLevel, NewAcc).
+sink_island(Table, {I, J}) ->
+    case ets:member(Table, {I, J}) of
+        true ->
+            ets:delete(Table, {I, J}),
+            sink_island(Table, {I - 1, J}),
+            sink_island(Table, {I + 1, J}),
+            sink_island(Table, {I, J - 1}),
+            sink_island(Table, {I, J + 1});
+        false -> ok
+    end.
 ```
